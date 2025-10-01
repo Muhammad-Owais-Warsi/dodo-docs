@@ -1,0 +1,108 @@
+---
+title: Subscription with Usage Based Billing Tutorial
+description: This tutorial demonstrates the integration of products with flat subscription with Usage Based Billing.
+icon: "credit-card"
+---
+
+## Step 1: Creating a Meter 
+Meters define how your usage events are aggregated and measured for billing purposes.
+
+Read More: [Meter](https://docs.dodopayments.com/developer-resources/usage-based-billing-guide#creating-a-meter)
+
+<Frame>
+    <img src="/images/guides/subscription-with-usage-based-billing/meter.png" alt="Creating a Meter" />
+</Frame>
+
+
+Review your meter details and click on **Create**.
+
+<Check>
+Your meter is sucessfully created and is ready to use.
+</Check>
+
+
+
+## Step 2: Creating a Product
+Create a product for your customers.
+
+Read More: [Product](https://docs.dodopayments.com/)
+
+<Steps>
+<Step title="Configure Product Details">
+Provide the basic details for your product.
+
+<Frame>
+    <img src="/images/guides/subscription-with-usage-based-billing/product-1.png" alt="Creating a Product" />
+</Frame>
+</Step>
+
+<Step title="Configure Product Pricing Details">
+Configure the pricing details for your product. 
+
+<Steps>
+
+<Step title="Setup Usage Based Billing">
+  <Frame>
+    <img src="/images/guides/subscription-with-usage-based-billing/product-2.png" alt="Creating a Product" />
+  </Frame>
+
+  <ParamField body="Pricing Type"  required>
+    Select Usage Based Billing for your product.
+  </ParamField>
+
+  <ParamField path="Price" required>
+    Set the price for your product/subscription.
+
+  </ParamField>
+
+  <ParamField path="Discount Applicable">
+    Enter any discount that applies to the product or subscription.
+
+  </ParamField>
+
+  <ParamField path="Repeat Payment Every">
+    Select the duration after which the subscription renews.
+
+  </ParamField>
+
+ <ParamField path="Subscription Period">
+    Enter the deadline for the subscription.
+
+  </ParamField>
+</Step>
+
+<Step>
+  <Frame>
+    <img src="/images/guides/subscription-with-usage-based-billing/product-3.png" alt="Creating a Product" />
+  </Frame>
+
+  <ParamField body="Associated Meters"  required>
+    Select the required meter for your product.
+  </ParamField>
+
+  <ParamField body="Price Per Unit"  required>
+    Set up the price per unit for your service.
+  </ParamField>
+
+  <ParamField body="Free Threshold"  required>
+    Set the free threshold limit.
+  </ParamField>
+
+  <Note>
+    Threshold value is the number of units customers can consume at no charge before paid usage calculation starts.
+  </Note>
+</Step>
+
+<Step title="Create Product">
+Review your product details and click on **Add Product**.
+
+<Check>
+Your product is sucessfully created.
+</Check>
+</Step>
+</Steps>
+
+</Step>
+</Steps>
+
+This sets up the the product with flat subscription using usage based billing feature. 
