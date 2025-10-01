@@ -125,6 +125,7 @@
             "pages": [
               "developer-resources/checkout-session",
               "developer-resources/usage-based-billing-guide",
+              "developer-resources/event-filtering-usage-based-billing",
               "developer-resources/integration-guide",
               "developer-resources/subscription-integration-guide",
               "developer-resources/integration-tutorial",

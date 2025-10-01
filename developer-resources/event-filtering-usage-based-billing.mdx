@@ -1,0 +1,187 @@
+---
+title: Advanced Event Filtering in Usage Based Billing.
+description: This guide demonstrates how to implement advanced event fltering in Usage Based Billing.
+icon: "credit-card"
+---
+
+
+## Creating a Meter
+
+Meters define how your usage events are aggregated and measured for billing purposes.
+
+Before creating a meter, plan your usage tracking strategy:
+- Identify what usage events you want to track
+- Determine how events should be aggregated (count, sum, etc.)
+- Define any filtering requirements for specific use cases
+
+### Step-by-Step Meter Creation
+
+Follow this comprehensive guide to set up your usage meter:
+
+<Steps>
+<Step title="Configure Basic Information">
+Set up the fundamental details for your meter.
+
+<ParamField path="Meter Name" type="string" required>
+Choose a clear, descriptive name that identifies what this meter tracks.
+
+Examples: "Tokens", "API Calls", "Storage Usage", "Compute Hours"
+</ParamField>
+
+<ParamField path="Description" type="string">
+Provide a detailed explanation of what this meter measures.
+
+Example: "Counts each POST /v1/orders request made by the customer"
+</ParamField>
+
+<ParamField path="Event Name" type="string" required>
+Specify the event identifier that will trigger this meter.
+
+Examples: "token", "api.call", "storage.usage", "compute.session"
+</ParamField>
+
+<Info>
+The event name must match exactly what you send in your usage events. Event names are case-sensitive.
+</Info>
+</Step>
+
+<Step title="Configure Aggregation Settings">
+Define how the meter calculates usage from your events.
+
+<ParamField path="Aggregation Type" type="string" required>
+Select how events should be aggregated:
+
+<Tabs>
+<Tab title="Count">
+Simply counts the number of events received.
+
+Use case: API calls, page views, file uploads
+
+Calculation: Total number of events
+</Tab>
+
+<Tab title="Sum">
+Adds up values from a specific property in your events.
+
+Use case: Data transfer, storage consumption, processing time
+
+Calculation: Sum of all property values
+</Tab>
+
+
+<Tab title="Max">
+Records the highest value of a specific property during the billing period.
+
+Use case: Peak concurrent users, maximum storage used, highest bandwidth
+
+Calculation: Maximum property value observed
+</Tab>
+
+<Tab title="Last">
+Uses the most recent value of a specific property.
+
+Use case: Current plan tier, latest configuration setting
+
+Calculation: Last recorded property value
+</Tab>
+</Tabs>
+</ParamField>
+
+<ParamField path="Over Property" type="string">
+The property name from event metadata to aggregate over.
+
+<Warning>
+This field is required when using Sum, Max, or Last aggregation types.
+</Warning>
+</ParamField>
+
+<ParamField path="Measurement Unit" type="string" required>
+Define the unit label for display purposes in reports and billing.
+
+Examples: "calls", "GB", "hours", "tokens"
+</ParamField>
+</Step>
+
+<Step title="Configure Event Filtering">
+Set up criteria to control which events are included in the meter.
+
+
+**Enable Event Filtering**
+
+Toggle **Enable Event Filtering** to activate conditional event processing.
+
+**Choose Filter Logic**
+
+Select how multiple conditions are evaluated:
+
+<Frame>
+    <img src="/images/guides/advanced-event-filtering-ubb/event-filtering.png" alt="Event Filtering" />
+</Frame>
+
+<Note>
+    Filters in the image means any event with status code of `200` at `/v1/api` by the customer with `premium` plan under `14th` hour will be counted and else ignored.
+</Note>
+
+<Tabs>
+<Tab title="AND Logic">
+All conditions must be true for an event to be counted. Use this when you need events to meet multiple strict criteria simultaneously.
+
+**Example:** Count API calls where `user_tier = "premium"` AND `endpoint = "/api/v2/users"`
+</Tab>
+
+<Tab title="OR Logic">
+At least one condition must be true for an event to be counted. Use this when you want to include events that meet any of several criteria.
+
+**Example:** Count events where `method = "POST"` OR `method = "PUT"` OR `method = "DELETE"`
+</Tab>
+</Tabs>
+
+**Setting Up Filter Conditions**
+
+<Steps>
+<Step title="Add Condition">
+Click **Add condition** to create a new filter rule.
+</Step>
+
+<Step title="Configure Property Key">
+Specify the property name from your event metadata.
+</Step>
+
+<Step title="Select Comparator">
+Choose from available operators:
+- `equals` - Exact match
+- `not equals` - Exclusion filter
+- `greater than` - Numeric comparison  
+- `greater than or equals` - Numeric comparison (inclusive)
+- `less than` - Numeric comparison
+- `less than or equals` - Numeric comparison (inclusive)
+- `contains` - String contains substring
+- `does not contain` - String exclusion filter
+</Step>
+
+<Step title="Set Comparison Value">
+Set the target value for comparison.
+</Step>
+
+<Step title="Add Groups">
+Use **Add Group** to create additional condition groups for complex logic.
+</Step>
+</Steps>
+
+
+<Warning>
+Filtered properties must be included in your event metadata for the conditions to work properly. Events missing required properties will be excluded from counting.
+</Warning>
+</Step>
+
+<Step title="Create Meter">
+Review your meter configuration and click on **Create Meter**.
+
+<Check>
+Your meter is now ready to receive and aggregate usage events.
+</Check>
+
+</Step>
+</Steps>
+
+This is how we can implement advanced events filtering in Usage Based Billing.
