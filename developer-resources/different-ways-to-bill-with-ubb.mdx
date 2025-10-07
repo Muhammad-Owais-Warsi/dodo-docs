@@ -26,7 +26,7 @@ Set up the fundamental details for your meter.
 <ParamField path="Meter Name" type="string" required>
 Choose a clear, descriptive name that identifies what this meter tracks.
 
-Examples: "Tokens", "API Calls", "Storage Usage", "Compute Hours"
+Example: "API Calls"
 </ParamField>
 
 <ParamField path="Description" type="string">
@@ -38,7 +38,7 @@ Example: "Counts each POST /v1/orders request made by the customer"
 <ParamField path="Event Name" type="string" required>
 Specify the event identifier that will trigger this meter.
 
-Examples: "token", "api.call", "storage.usage", "compute.session"
+Examples: "api.call"
 </ParamField>
 
 <Info>
@@ -59,7 +59,7 @@ To calculate the number of API calls go wtih `Count` type.
 <ParamField path="Measurement Unit" type="string" required>
 Define the unit label for display purposes in reports and billing.
 
-Examples: "calls", "GB", "hours", "tokens"
+Example: "calls"
 </ParamField>
 </Step>
 
@@ -73,17 +73,13 @@ Toggle **Enable Event Filtering** to activate conditional event processing.
 
 **Choose Filter Logic**
 
-Select how multiple conditions are evaluated:
-
-<Note>
-    Filters in the image means any event with status code of `200` at `/v1/api` by the customer with `premium` plan under `14th` hour will be counted and else ignored.
-</Note>
+Select how multiple conditions are evaluated
 
 <Tabs>
 <Tab title="AND Logic">
 All conditions must be true for an event to be counted. Use this when you need events to meet multiple strict criteria simultaneously.
 
-**Example:** Count API calls where `user_tier = "premium"` AND `endpoint = "/api/v2/users"`
+**Example:** Count API calls where `user_tier = "premium"` AND `endpoint = "/v1/orders"`
 </Tab>
 
 <Tab title="OR Logic">
@@ -141,6 +137,71 @@ Your meter is now ready to receive and aggregate usage events.
 </Step>
 </Steps>
 
+### Ingest an Event
+
+Ingest event to your configured meter using Events API:
+
+<CodeGroup>
+```javascript Node.js
+const response = await fetch('https://test.dodopayments.com/events/ingest', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${process.env.DODO_API_KEY}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    events: [
+      {
+        event_id: "api_call_1234",
+        customer_id: "cust_id_123", 
+        event_name: "api.call",
+        timestamp: new Date().toISOString(),
+      }
+    ]
+  })
+});
+```
+
+```python Python
+import requests
+from datetime import datetime
+
+response = requests.post(
+    'https://test.dodopayments.com/events/ingest',
+    headers={
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'events': [
+            {
+                'event_id': 'api_call_1234',
+                'customer_id': 'cust_id_123',
+                'event_name': 'api.call',
+                'timestamp': datetime.now().isoformat(),
+            }
+        ]
+    }
+)
+```
+
+```curl cURL
+curl -X POST 'https://test.dodopayments.com/events/ingest' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "events": [
+      {
+        "event_id": "api_call_1234",
+        "customer_id": "cust_id_123",
+        "event_name": "api.call", 
+        "timestamp": "2024-01-15T10:30:00Z",
+      }
+    ]
+  }'
+```
+</CodeGroup>
+
 
 ## Billing on the basis of Token Usage
 
@@ -159,19 +220,19 @@ Set up the fundamental details for your meter.
 <ParamField path="Meter Name" type="string" required>
 Choose a clear, descriptive name that identifies what this meter tracks.
 
-Examples: "Tokens", "API Calls", "Storage Usage", "Compute Hours"
+Example: "Tokens"
 </ParamField>
 
 <ParamField path="Description" type="string">
 Provide a detailed explanation of what this meter measures.
 
-Example: "Counts each POST /v1/orders request made by the customer"
+Example: "Counts the token usage by the customers"
 </ParamField>
 
 <ParamField path="Event Name" type="string" required>
 Specify the event identifier that will trigger this meter.
 
-Examples: "token", "api.call", "storage.usage", "compute.session"
+Example: "token"
 </ParamField>
 
 <Info>
@@ -199,7 +260,7 @@ This field is required when using Sum, Max, or Last aggregation types.
 <ParamField path="Measurement Unit" type="string" required>
 Define the unit label for display purposes in reports and billing.
 
-Examples: "calls", "GB", "hours", "tokens"
+Example: "tokens"
 </ParamField>
 </Step>
 
@@ -213,23 +274,19 @@ Toggle **Enable Event Filtering** to activate conditional event processing.
 
 **Choose Filter Logic**
 
-Select how multiple conditions are evaluated:
-
-<Note>
-    Filters in the image means any event with status code of `200` at `/v1/api` by the customer with `premium` plan under `14th` hour will be counted and else ignored.
-</Note>
+Select how multiple conditions are evaluated
 
 <Tabs>
 <Tab title="AND Logic">
 All conditions must be true for an event to be counted. Use this when you need events to meet multiple strict criteria simultaneously.
 
-**Example:** Count API calls where `user_tier = "premium"` AND `endpoint = "/api/v2/users"`
+**Example:** Count Token usage on `endpoint = "/v1/ai"` **AND** `user_plan = "pro"` 
 </Tab>
 
 <Tab title="OR Logic">
 At least one condition must be true for an event to be counted. Use this when you want to include events that meet any of several criteria.
 
-**Example:** Count events where `method = "POST"` OR `method = "PUT"` OR `method = "DELETE"`
+**Example:** Count Token usage on `endpoint = "/v1/ai"` **OR** `endpoint = "/v1/chat"`
 </Tab>
 </Tabs>
 
@@ -282,6 +339,71 @@ Your meter is now ready to receive and aggregate usage events.
 </Steps>
 
 
+### Ingest an Event
+
+Ingest event to your configured meter using Events API:
+
+<CodeGroup>
+```javascript Node.js
+const response = await fetch('https://test.dodopayments.com/events/ingest', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${process.env.DODO_API_KEY}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    events: [
+      {
+        event_id: "token_usage_1234",
+        customer_id: "cust_id_123", 
+        event_name: "token",
+        timestamp: new Date().toISOString(),
+      }
+    ]
+  })
+});
+```
+
+```python Python
+import requests
+from datetime import datetime
+
+response = requests.post(
+    'https://test.dodopayments.com/events/ingest',
+    headers={
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'events': [
+            {
+                'event_id': 'token_usage_1234',
+                'customer_id': 'cust_id_123',
+                'event_name': 'token',
+                'timestamp': datetime.now().isoformat(),
+            }
+        ]
+    }
+)
+```
+
+```curl cURL
+curl -X POST 'https://test.dodopayments.com/events/ingest' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "events": [
+      {
+        "event_id": "token_usage_1234",
+        "customer_id": "cust_id_123",
+        "event_name": "token", 
+        "timestamp": "2025-10-8T10:30:00Z",
+      }
+    ]
+  }'
+```
+</CodeGroup>
+
 
 ## Billing on the basis of Runtime (Execution Time)
 
@@ -300,19 +422,19 @@ Set up the fundamental details for your meter.
 <ParamField path="Meter Name" type="string" required>
 Choose a clear, descriptive name that identifies what this meter tracks.
 
-Examples: "Tokens", "API Calls", "Storage Usage", "Compute Hours"
+Example: "Compute Hours"
 </ParamField>
 
 <ParamField path="Description" type="string">
 Provide a detailed explanation of what this meter measures.
 
-Example: "Counts each POST /v1/orders request made by the customer"
+Example: "Count the total compute hours by the customer"
 </ParamField>
 
 <ParamField path="Event Name" type="string" required>
 Specify the event identifier that will trigger this meter.
 
-Examples: "token", "api.call", "storage.usage", "compute.session"
+Example: "compute.hour"
 </ParamField>
 
 <Info>
@@ -340,7 +462,7 @@ This field is required when using Sum, Max, or Last aggregation types.
 <ParamField path="Measurement Unit" type="string" required>
 Define the unit label for display purposes in reports and billing.
 
-Examples: "calls", "GB", "hours", "tokens"
+Example: "hours"
 </ParamField>
 </Step>
 
@@ -354,23 +476,19 @@ Toggle **Enable Event Filtering** to activate conditional event processing.
 
 **Choose Filter Logic**
 
-Select how multiple conditions are evaluated:
-
-<Note>
-    Filters in the image means any event with status code of `200` at `/v1/api` by the customer with `premium` plan under `14th` hour will be counted and else ignored.
-</Note>
+Select how multiple conditions are evaluated
 
 <Tabs>
 <Tab title="AND Logic">
 All conditions must be true for an event to be counted. Use this when you need events to meet multiple strict criteria simultaneously.
 
-**Example:** Count API calls where `user_tier = "premium"` AND `endpoint = "/api/v2/users"`
+**Example:** Count compute hours where `execution_time > 60` **AND** `model_type = "advanced"`
 </Tab>
 
 <Tab title="OR Logic">
 At least one condition must be true for an event to be counted. Use this when you want to include events that meet any of several criteria.
 
-**Example:** Count events where `method = "POST"` OR `method = "PUT"` OR `method = "DELETE"`
+**Example:** Count compute hours where `hours > 60` **OR** `model_type = "advanced"`
 </Tab>
 </Tabs>
 
@@ -421,3 +539,77 @@ Your meter is now ready to receive and aggregate usage events.
 
 </Step>
 </Steps>
+
+### Ingest an Event
+
+Ingest event to your configured meter using Events API:
+
+<CodeGroup>
+```javascript Node.js
+const response = await fetch('https://test.dodopayments.com/events/ingest', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${process.env.DODO_API_KEY}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    events: [
+      {
+        event_id: "compute_hour_1234",
+        customer_id: "cust_id_123", 
+        event_name: "compute.hour",
+        timestamp: new Date().toISOString(),
+        metadata: {
+            hour: 60
+        }
+      }
+    ]
+  })
+});
+```
+
+```python Python
+import requests
+from datetime import datetime
+
+response = requests.post(
+    'https://test.dodopayments.com/events/ingest',
+    headers={
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'events': [
+            {
+                'event_id': 'compute_hour_1234',
+                'customer_id': 'cust_id_123',
+                'event_name': 'compute.hour',
+                'timestamp': datetime.now().isoformat(),
+                metadata: {
+                    hour: 60
+                }
+            }
+        ]
+    }
+)
+```
+
+```curl cURL
+curl -X POST 'https://test.dodopayments.com/events/ingest' \
+  -H 'Authorization: Bearer YOUR_API_KEY' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "events": [
+      {
+        "event_id": "compute_hour_1234",
+        "customer_id": "cust_id_123",
+        "event_name": "compute.hour", 
+        "timestamp": "2025-10-8T10:30:00Z",
+        metadata: {
+            hour: 60
+        }
+      }
+    ]
+  }'
+```
+</CodeGroup>
