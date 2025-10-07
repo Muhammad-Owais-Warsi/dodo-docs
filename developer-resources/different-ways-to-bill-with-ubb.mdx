@@ -250,7 +250,7 @@ To calculate the Token usage go wtih `Sum` type.
 </ParamField>
 
 <ParamField path="Over Property" type="string">
-The property name from event metadata to aggregate over. Here, aggregate it over `token_usage` field.
+The property name from event metadata to aggregate over. Here, aggregate it over `token` field.
 
 <Warning>
 This field is required when using Sum, Max, or Last aggregation types.
@@ -260,7 +260,7 @@ This field is required when using Sum, Max, or Last aggregation types.
 <ParamField path="Measurement Unit" type="string" required>
 Define the unit label for display purposes in reports and billing.
 
-Example: "tokens"
+Example: "token"
 </ParamField>
 </Step>
 
@@ -358,6 +358,9 @@ const response = await fetch('https://test.dodopayments.com/events/ingest', {
         customer_id: "cust_id_123", 
         event_name: "token",
         timestamp: new Date().toISOString(),
+        metadata: {
+          tokens: 100
+        }
       }
     ]
   })
@@ -381,6 +384,9 @@ response = requests.post(
                 'customer_id': 'cust_id_123',
                 'event_name': 'token',
                 'timestamp': datetime.now().isoformat(),
+                'metadata': {
+                  'tokens': 100
+                }                
             }
         ]
     }
@@ -398,6 +404,9 @@ curl -X POST 'https://test.dodopayments.com/events/ingest' \
         "customer_id": "cust_id_123",
         "event_name": "token", 
         "timestamp": "2025-10-8T10:30:00Z",
+        metadata: {
+          tokens: 100
+        }
       }
     ]
   }'
@@ -452,7 +461,7 @@ To calculate the Runtime go wtih `Sum` type.
 </ParamField>
 
 <ParamField path="Over Property" type="string">
-The property name from event metadata to aggregate over. Here, aggregate it over `runtime` field.
+The property name from event metadata to aggregate over. Here, aggregate it over `hour` field.
 
 <Warning>
 This field is required when using Sum, Max, or Last aggregation types.
@@ -560,7 +569,7 @@ const response = await fetch('https://test.dodopayments.com/events/ingest', {
         event_name: "compute.hour",
         timestamp: new Date().toISOString(),
         metadata: {
-            hour: 60
+          hour: 60
         }
       }
     ]
@@ -585,8 +594,8 @@ response = requests.post(
                 'customer_id': 'cust_id_123',
                 'event_name': 'compute.hour',
                 'timestamp': datetime.now().isoformat(),
-                metadata: {
-                    hour: 60
+                'metadata': {
+                  'hour': 60
                 }
             }
         ]
@@ -606,7 +615,7 @@ curl -X POST 'https://test.dodopayments.com/events/ingest' \
         "event_name": "compute.hour", 
         "timestamp": "2025-10-8T10:30:00Z",
         metadata: {
-            hour: 60
+          hour: 60
         }
       }
     ]
