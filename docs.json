@@ -1,42 +1,24 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
+  "theme": "maple",
   "name": "Dodo Payments Documentation",
   "colors": {
     "primary": "#81B700",
     "light": "#C6FE1E",
-    "dark": "#0D0D0D"
+    "dark": "#81B700"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
         "tab": "Setup & Features",
+        "icon": "rocket",
         "groups": [
           {
             "group": "Getting Started",
             "pages": [
               "introduction",
-              {
-                "group": "Verification",
-                "icon": "id-card",
-                "pages": [
-                  "miscellaneous/verification-process",
-                  "features/payouts/compliance",
-                  "miscellaneous/tax-forms",
-                  "features/payouts/link-bank-account"
-                ]
-              }
-            ]
-          },
-          {
-            "group": "Important Links",
-            "pages": [
-              "miscellaneous/pricing-and-fee-structure",
-              "features/payment-methods",
-              "/features/payouts/payout-structure",
-              "features/mor-vs-pg",
-              "miscellaneous/list-of-countries-we-accept-payments-from"
+              "migrate-to-dodo"
             ]
           },
           {
@@ -77,6 +59,28 @@
             ]
           },
           {
+            "group": "Merchant of Record",
+            "pages": [
+              {
+                "group": "Verification",
+                "icon": "id-card",
+                "pages": [
+                  "miscellaneous/verification-process",
+                  "features/payouts/compliance",
+                  "miscellaneous/tax-forms",
+                  "features/payouts/link-bank-account"
+                ]
+              },
+              "/features/payouts/payout-structure",
+              "miscellaneous/pricing-and-fee-structure",
+              "features/payment-methods",
+              "features/mor-vs-pg",
+              "miscellaneous/list-of-countries-we-accept-payments-from",
+              "miscellaneous/merchant-acceptance",
+              "miscellaneous/review-monitoring-policy"
+            ]
+          },
+          {
             "group": "Miscellaneous",
             "pages": [
               {
@@ -98,14 +102,7 @@
                   "miscellaneous/gtm-tools/feature-prioritization-tool"
                 ]
               },
-              "miscellaneous/faq"
-            ]
-          },
-          {
-            "group": "Security & Compliance",
-            "pages": [
-              "miscellaneous/merchant-acceptance",
-              "miscellaneous/review-monitoring-policy",
+              "miscellaneous/faq",
               "miscellaneous/security-policy"
             ]
           }
@@ -113,6 +110,7 @@
       },
       {
         "tab": "Developer Resources",
+        "icon": "code",
         "groups": [
           {
             "group": "Developer Resources",
@@ -213,6 +211,7 @@
       },
       {
         "tab": "API Reference",
+        "icon": "brackets-curly",
         "groups": [
           {
             "group": "API Reference",
@@ -388,6 +387,7 @@
       },
       {
         "tab": "External Integrations",
+        "icon": "plug",
         "groups": [
           {
             "group": "External Integrations",
@@ -441,6 +441,7 @@
       },
       {
         "tab": "Changelog",
+        "icon": "cash-register",
         "groups": [
           {
             "group": "Changelog",
@@ -547,6 +548,7 @@
       },
       {
         "tab": "Community Projects",
+        "icon": "users",
         "groups": [
           {
             "group": "Community Projects",
@@ -582,13 +584,13 @@
         "label": "Community",
         "icon": "discord",
         "href": "https://discord.gg/bYqAp4ayYh"
+      },
+      {
+        "icon": "house",
+        "label": "Dashboard",
+        "href": "https://app.dodopayments.com/"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Get Started",
-      "href": "https://app.dodopayments.com/"
-    }
+    ]
   },
   "footer": {
     "socials": {
